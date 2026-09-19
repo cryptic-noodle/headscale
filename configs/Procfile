@@ -1,0 +1,4 @@
+headscale: mkdir -p /data/headscale && [ -e /data/headscale/extra-records.json ] || echo '[]' > /data/headscale/extra-records.json && [ -e /data/headscale/config.yaml ] || cp /etc/headscale/config.yaml.default /data/headscale/config.yaml && headscale serve --config /data/headscale/config.yaml
+headplane: mkdir -p /data/headplane && cd /opt/headplane && HEADPLANE_CONFIG_PATH=/etc/headscale/headplane-config.yaml node /opt/headplane/build/server/index.js
+caddy: mkdir -p /data/caddy && caddy run --config /etc/headscale/Caddyfile --adapter caddyfile
+watcher: echo /data/headscale/config.yaml | entr -n pkill -TERM headscale

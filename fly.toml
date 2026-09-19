@@ -1,0 +1,40 @@
+app = "myheadscale"
+kill_signal = "SIGINT"
+kill_timeout = 5
+primary_region = 'sin'
+swap_size_mb = 1024
+
+[mounts]
+  source = "headscale_data"
+  destination = "/data"
+
+[[services]]
+  internal_port = 80
+  protocol = "tcp"
+
+  [[services.ports]]
+  handlers = ["proxy_proto"]
+  port = 80
+
+[[services]]
+  internal_port = 443
+  protocol = "tcp"
+
+  [[services.ports]]
+  handlers = ["proxy_proto"]
+  port = 443
+
+[[metrics]]
+  port = 8081
+  path = "/metrics"
+  processes = ["app"]
+
+# [[env]]
+
+  # HEADSCALE_OIDC_CLIENT_ID=
+  # HEADSCALE_OIDC_CLIENT_SECRET=
+  # HEADPLANE_LOAD_ENV_OVERRIDES=true
+  # HEADPLANE_SERVER__COOKIE_SECRET=
+  # HEADPLANE_HEADSCALE__API_KEY=
+  # HEADPLANE_OIDC__CLIENT_ID=
+  # HEADPLANE_OIDC__CLIENT_SECRET=

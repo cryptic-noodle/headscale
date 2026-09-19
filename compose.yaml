@@ -1,0 +1,12 @@
+services: 
+  headscale:
+    build: .
+    # environment:
+    #   - HEADSCALE_OIDC_CLIENT_ID=
+    #   - HEADSCALE_OIDC_CLIENT_SECRET=
+
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./data:/data

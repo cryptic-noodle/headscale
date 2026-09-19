@@ -1,0 +1,66 @@
+{
+    admin off
+    persist_config off
+    storage file_system {
+        root /data/caddy
+    }
+    log {
+        output stdout
+        format json
+    }
+    servers {
+        listener_wrappers {
+        proxy_protocol {
+            timeout 5s
+            allow 172.16.0.0/16
+        }
+        tls
+        }
+    }
+    key_type p384
+}
+
+# http://tailscale.misabar.com {
+#     redir https://{host}{uri} permanent
+# }
+
+http://tailscale.misabar.com {
+    # Tailscale captive portal detection
+    handle /generate_204 {
+        respond 204
+    }
+
+    handle * {
+        redir https://{host}{uri}
+    }
+}
+
+
+https://tailscale.misabar.com {
+    tls {
+        protocols tls1.3    
+        curves x25519
+    }
+    # encode zstd gzip
+
+    # header / {
+    #     Strict-Transport-Security "max-age=31536000;"
+    #     X-XSS-Protection "0"
+    #     X-Frame-Options "SAMEORIGIN"
+    #     X-Robots-Tag "noindex, nofollow"
+    #     X-Content-Type-Options "nosniff"    
+    #     -Server
+    #     -X-Powered-By
+    #     -Last-Modified
+    # }
+
+    reverse_proxy /admin/* localhost:3000 {
+        header_up True-Client-IP {remote_host}
+        header_up X-Real-IP {remote_host}
+    }
+
+    reverse_proxy * localhost:8080 {
+        header_up True-Client-IP {remote_host}
+        header_up X-Real-IP {remote_host}
+    }
+}
