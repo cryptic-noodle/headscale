@@ -73,7 +73,7 @@ FROM caddy:alpine AS caddy
 
 FROM ghcr.io/tale/headplane:latest AS headplane
 
-FROM headscale/headscale:0.29.5 AS headscale
+FROM headscale/headscale:0.29.6 AS headscale
 
 FROM node:24-alpine
 
